@@ -58,7 +58,7 @@
         const manifest = {
             "name": "Minesweeper Lite",
             "short_name": "Minesweeper",
-            "start_url": ".",
+            "start_url": window.location.href,
             "display": "standalone",
             "background_color": "#f8fafc",
             "theme_color": "#0f172a",
@@ -77,22 +77,6 @@
         link.rel = 'manifest';
         link.href = manifestURL;
         document.head.appendChild(link);
-
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', (e) => {
-                    e.waitUntil(caches.open('minesweeper-v1').then((cache) => {
-                        return cache.addAll(['./']);
-                    }));
-                });
-                self.addEventListener('fetch', (e) => {
-                    e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
-                });
-            `;
-            const swBlob = new Blob([swCode], {type: 'application/javascript'});
-            const swURL = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swURL);
-        }
     </script>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col items-center p-4">
